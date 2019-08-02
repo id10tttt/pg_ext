@@ -2,7 +2,7 @@
 MODULES = new_town_method
 EXTENSION =	new_town_method
 DATA = new_town_method--0.0.1.sql
-
+LDLIBS := -lm
 # 测试
 REGRESS = new_town_method_test
 

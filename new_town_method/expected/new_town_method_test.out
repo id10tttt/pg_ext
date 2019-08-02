@@ -1,13 +1,18 @@
 CREATE EXTENSION new_town_method;
-select new_town_method(1, 2, 3, 4);
+select new_town_method(1, 2, 30, 2);
  new_town_method  
 ------------------
- 1.41421568627451
+ 1.41421356237309
 (1 row)
 
-select new_town_method(1, 5, 3, 4);
+select new_town_method(1, 2, 30, 4);
  new_town_method  
 ------------------
- 2.23809523809524
+ 1.18920711500272
 (1 row)
 
+select new_town_method(1, 5, 30, 4);
+ new_town_method  
+------------------
+ 1.49534878122122
+(1 row)

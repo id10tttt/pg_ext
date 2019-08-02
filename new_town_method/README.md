@@ -10,6 +10,7 @@
             MODULES = new_town_method		    # 扩展的名称
             EXTENSION =	new_town_method
             DATA = new_town_method--0.0.1.sql   # 扩展安装的SQL文件
+            LDLIBS := -lm                       # 用到了 math.h ，所以需要链接(gcc -lm)
 
             <!-- REGRESS = new_town_method_test      # 扩展测试的SQL文件 -->
             # PostgreSQL 构建扩展相关的命令，固定格式
@@ -53,7 +54,6 @@
                 int32 pow_value = PG_GETARG_INT32(3);
 
                 float8 res;
-                // printf("%f %d %d %d", xn_value, value_to_power, loop_time, pow_value);
                 res = new_town_method_power(xn_value, value_to_power, loop_time, pow_value);
 
                 PG_RETURN_FLOAT8(res);
@@ -65,10 +65,8 @@
 
                 for(i = 0; i < loop_time; i ++){
                     tmp = xn_value;
-                    xn_value = 1/2.0 * (tmp + value_to_power / tmp);
-                    // xn_value = ((pow_value - 1) / pow_value) * tmp + value_to_power / (pow_value * pow(tmp, pow_value - 1));
+                    xn_value = tmp - (pow(tmp, pow_value) - value_to_power) / (pow_value * pow(tmp, pow_value - 1));
                 }
-                // PG_RETURN_FLOAT8(xn_value);
                 return xn_value;
             }
 * 编译 make && sudo make install

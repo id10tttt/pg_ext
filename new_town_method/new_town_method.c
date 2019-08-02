@@ -16,7 +16,6 @@ new_town_method(PG_FUNCTION_ARGS){
     int32 pow_value = PG_GETARG_INT32(3);
 
     float8 res;
-    // printf("%f %d %d %d", xn_value, value_to_power, loop_time, pow_value);
     res = new_town_method_power(xn_value, value_to_power, loop_time, pow_value);
 
     PG_RETURN_FLOAT8(res);
@@ -28,9 +27,7 @@ float8 new_town_method_power(float8 xn_value, int32 value_to_power, int32 loop_t
 
     for(i = 0; i < loop_time; i ++){
         tmp = xn_value;
-        xn_value = 1/2.0 * (tmp + value_to_power / tmp);
-        // xn_value = ((pow_value - 1) / pow_value) * tmp + value_to_power / (pow_value * pow(tmp, pow_value - 1));
+        xn_value = tmp - (pow(tmp, pow_value) - value_to_power) / (pow_value * pow(tmp, pow_value - 1));
     }
-    // PG_RETURN_FLOAT8(xn_value);
     return xn_value;
 }
