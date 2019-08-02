@@ -32,16 +32,18 @@
     
     * new_town_method.c
 
-            #include "postgres.h"
-            #include "fmgr.h"
+            #include "postgres.h"   //包含 PostgreSQL 基础的接口
+            #include "fmgr.h"       //包含了PG_GETARG_XX和PG_RETURN_XX等获取参数和返回结果的重要的宏
             #include <math.h>
 
-            PG_MODULE_MAGIC;
+            PG_MODULE_MAGIC;        //PG_MODULE_MAGIC 是一个从 PostgreSQL 8.2版本后就必须的宏，必须写在#include "fmgr.h"之后
 
+            // PG_FUNCTION_INFO_V1 宏声明了我们所定义的函数为 Version-1 约定的函数。我们选择了 Version-1 的开发约定，所以在定义方法之前，需要调用
             PG_FUNCTION_INFO_V1(new_town_method);
 
             float8 new_town_method_power(float8 xn_value, int32 value_to_power, int32 loop_time, int32 pow_value);
 
+            // Datum 等同于void *，表示函数返回任意类型的数据
             Datum
             new_town_method(PG_FUNCTION_ARGS){
                 float8 xn_value = PG_GETARG_FLOAT8(0);
@@ -70,4 +72,30 @@
             }
 * 编译 make && sudo make install
 
-* test
+* 测试 TEST
+    * 新建 sql 文件夹，创建 new_town_method_test.sql
+
+            CREATE EXTENSION new_town_method;
+
+            select new_town_method(1, 2, 3, 4);
+            select new_town_method(1, 5, 3, 4);
+    * 在 Makefile 文件里面添加
+
+            REGRESS = new_town_method_test
+    * 新建 expected 文件夹
+    * 执行 make && make installcheck ， 会在 results 文件夹里面输出结果，将该输出，复制到 expected里面，文件 new_town_method_test.out
+
+            CREATE EXTENSION new_town_method;
+            select new_town_method(1, 2, 3, 4);
+            new_town_method  
+            ------------------
+            1.41421568627451
+            (1 row)
+
+            select new_town_method(1, 5, 3, 4);
+            new_town_method  
+            ------------------
+            2.23809523809524
+            (1 row)
+
+    * make clean && make && make installcheck
