@@ -7,16 +7,17 @@
 
     * Makefile
 
-            MODULES = new_town_method		# 扩展的名称
+            MODULES = new_town_method		    # 扩展的名称
             EXTENSION =	new_town_method
-            DATA = new_town_method--0.0.1.sql
+            DATA = new_town_method--0.0.1.sql   # 扩展安装的SQL文件
 
-            # 以下是 PostgreSQL 构建扩展相关的命令，保留就可以
+            <!-- REGRESS = new_town_method_test      # 扩展测试的SQL文件 -->
+            # PostgreSQL 构建扩展相关的命令，固定格式
             PG_CONFIG = pg_config
             PGXS := $(shell $(PG_CONFIG) --pgxs)
             include $(PGXS)
 
-    * new_town_method.control
+    * new_town_method.control 控制文件，声明该扩展的基础信息
 
             comment = 'Newtown methpod for postgresql function extend by C language'
             default_version = '0.0.1'
